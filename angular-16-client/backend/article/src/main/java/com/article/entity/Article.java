@@ -48,7 +48,7 @@ public class Article {
 
     private boolean disabled;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
     @PreUpdate

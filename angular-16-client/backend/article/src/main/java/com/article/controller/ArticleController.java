@@ -3,6 +3,7 @@ package com.article.controller;
 import com.article.PageData;
 import com.article.dto.ArticleRequestDto;
 import com.article.dto.ArticleResponseDto;
+import com.article.dto.ImageResponseDto;
 import com.article.entity.Article;
 import com.article.service.ArticleService;
 import org.springframework.data.domain.Pageable;
@@ -29,12 +30,23 @@ public class ArticleController {
     @GetMapping
     public PageData getAllArticle(@PageableDefault(sort = "id",
             direction = Sort.Direction.DESC) Pageable pageable) {
-        return  articleService.getAll(pageable);
+        return articleService.getAll(pageable);
     }
 
     @GetMapping("/{id}")
     public ArticleResponseDto getSingle(@PathVariable Long id) {
         return articleService.getSingle(id);
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<ImageResponseDto> getImage(@PathVariable Long id) {
+        return ResponseEntity.ok(articleService.getImage(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteArticle(@PathVariable Long id) {
+        articleService.deleteArticle(id);
+        return ResponseEntity.ok("Id: " + id + " Delete successfully");
     }
 
 }

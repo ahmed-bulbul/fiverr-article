@@ -1,10 +1,7 @@
 package com.article.service;
 
 import com.article.PageData;
-import com.article.dto.ArticleRequestDto;
-import com.article.dto.ArticleResponseDto;
-import com.article.dto.AuthorResponseDto;
-import com.article.dto.CommentResponseDto;
+import com.article.dto.*;
 import com.article.entity.Article;
 import com.article.entity.Comment;
 import com.article.entity.User;
@@ -132,6 +129,35 @@ public class ArticleServiceImp implements ArticleService {
         return responseDto;
     }
 
+    @Override
+    public ImageResponseDto getImage(Long id) {
+        Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Invalid Article Id or not found"));
+        if (Objects.nonNull(article.getImage()) && !article.getImage().trim().isBlank()) {
+            return getBase64(article.getImage(), id);
+        } else {
+            throw new RuntimeException("Base 64 conversation failed");
+        }
+    }
+
+    @Override
+    public void deleteArticle(Long id) {
+        Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Invalid Article Id or not found"));
+        if (Objects.nonNull(article.getImage()) && !article.getImage().trim().isBlank()) {
+            try {
+                Path path = Path.of("src/images/" + article.getImage());
+                Files.deleteIfExists(path);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        try {
+            articleRepository.delete(article);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot delete articles Cause: " + e.getMessage());
+        }
+    }
+
     public ArticleResponseDto convertToArticleResponseDto(Article article) {
         ArticleResponseDto responseDto = new ArticleResponseDto();
         responseDto.setArticleId(article.getId());
@@ -166,6 +192,24 @@ public class ArticleServiceImp implements ArticleService {
         responseDto.setUpdatedAt(article.getUpdateAt());
         return responseDto;
 
+    }
+
+    private ImageResponseDto getBase64(String image, Long id) {
+        Path path = Paths.get("src/images/" + image);
+        String fileExtension = image.substring(image.lastIndexOf("."));
+        String[] split = fileExtension.split("\\.");
+        try {
+            byte[] fileBytes = Files.readAllBytes(path);
+            String base64String = Base64.getEncoder().encodeToString(fileBytes);
+            if (split.length > 0) {
+                String imageExtension = fileExtension.split("\\.")[1].trim();
+                return new ImageResponseDto(id, "data:image/" + imageExtension + ";base64," + base64String, fileExtension);
+            } else {
+                return new ImageResponseDto(id, "data:image/" + fileExtension + "};base64," + base64String, fileExtension);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Image not found");
+        }
     }
 
 
