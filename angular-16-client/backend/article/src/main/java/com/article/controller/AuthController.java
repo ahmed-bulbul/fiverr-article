@@ -1,8 +1,11 @@
 package com.article.controller;
 
 import com.article.dto.LoginDto;
+import com.article.dto.SignUpDto;
 import com.article.repository.RoleRepository;
 import com.article.repository.UserRepository;
+import com.article.service.UserService;
+import com.article.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,9 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserService userService;
+
   @PostMapping("/login")
   public ResponseEntity<Map<String, String>> authenticateUser() {
     Map<String, String> response = new HashMap<>();
@@ -49,4 +55,13 @@ public class AuthController {
         SecurityContextHolder.clearContext();
         return new ResponseEntity<>("User logout successfully!...", HttpStatus.OK);
     }
+
+
+  @PostMapping("/register")
+  public ResponseEntity<Map<String, String>> register(@RequestBody SignUpDto signUpDto) {
+    Map<String, String> response = new HashMap<>();
+    Long id = userService.register(signUpDto);
+    response.put("message", "User create successfully!...");
+    return ResponseEntity.ok(response);
+  }
 }

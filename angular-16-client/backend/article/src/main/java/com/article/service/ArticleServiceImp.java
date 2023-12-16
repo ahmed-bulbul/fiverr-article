@@ -250,26 +250,26 @@ public class ArticleServiceImp implements ArticleService {
         responseDto.setArticleId(article.getId());
         responseDto.setTitle(article.getTitle());
         responseDto.setBody(article.getBody());
-        if (Objects.nonNull(article.getImage())) {
-            String image = article.getImage();
-            Path path = Paths.get("src/images/" + image);
-            String fileExtension = image.substring(image.lastIndexOf("."));
-            String[] split = fileExtension.split("\\.");
-            try {
-                byte[] fileBytes = Files.readAllBytes(path);
-                String base64String = Base64.getEncoder().encodeToString(fileBytes);
-                if (split.length > 0) {
-                    String imageExtension = fileExtension.split("\\.")[1].trim();
-                    responseDto.setFileExtension(fileExtension);
-                    responseDto.setImage("data:image/" + imageExtension + ";base64," + base64String);
-                } else {
-                    responseDto.setFileExtension(fileExtension);
-                    responseDto.setImage("data:image/" + fileExtension + "};base64," + base64String);
-                }
-            } catch (IOException e) {
-                throw new RuntimeException("Image not found");
-            }
-        }
+//        if (Objects.nonNull(article.getImage())) {
+//            String image = article.getImage();
+//            Path path = Paths.get("src/images/" + image);
+//            String fileExtension = image.substring(image.lastIndexOf("."));
+//            String[] split = fileExtension.split("\\.");
+//            try {
+//                byte[] fileBytes = Files.readAllBytes(path);
+//                String base64String = Base64.getEncoder().encodeToString(fileBytes);
+//                if (split.length > 0) {
+//                    String imageExtension = fileExtension.split("\\.")[1].trim();
+//                    responseDto.setFileExtension(fileExtension);
+//                    responseDto.setImage("data:image/" + imageExtension + ";base64," + base64String);
+//                } else {
+//                    responseDto.setFileExtension(fileExtension);
+//                    responseDto.setImage("data:image/" + fileExtension + "};base64," + base64String);
+//                }
+//            } catch (IOException e) {
+//                throw new RuntimeException("Image not found");
+//            }
+//        }
 
         responseDto.setLikes(article.getLikes());
         responseDto.setDisabled(article.isDisabled());
