@@ -32,12 +32,16 @@ public class Comment {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    @UpdateTimestamp
+
     private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @PreUpdate
+    private void onBaseUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
 }
