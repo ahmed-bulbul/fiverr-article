@@ -1,14 +1,12 @@
 package com.article.service;
 
 import com.article.PageData;
-import com.article.dto.ArticleRequestDto;
-import com.article.dto.ArticleResponseDto;
-import com.article.dto.AuthorResponseDto;
-import com.article.dto.CommentResponseDto;
+import com.article.dto.*;
 import com.article.entity.Article;
 import com.article.entity.Comment;
 import com.article.entity.User;
 import com.article.repository.ArticleRepository;
+import com.article.repository.CommentRepository;
 import com.article.util.Helper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,14 +27,26 @@ public class ArticleServiceImp implements ArticleService {
     private final UserService userService;
     private final ArticleRepository articleRepository;
     private final String IMAGES_STORE_PATH = "src/images/";
+    private final CommentRepository commentRepository;
 
-    public ArticleServiceImp(UserService userService, ArticleRepository articleRepository) {
+    public ArticleServiceImp(UserService userService, ArticleRepository articleRepository, CommentRepository commentRepository) {
         this.userService = userService;
         this.articleRepository = articleRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
     public Article create(ArticleRequestDto dto) {
+        if (!dto.getTitle().trim().isBlank()) {
+            if (dto.getTitle().length() > 100) {
+                throw new RuntimeException("title size exceed the limit must be between 100");
+            }
+        }
+        if (!dto.getBody().trim().isBlank()) {
+            if (dto.getBody().length() > 500) {
+                throw new RuntimeException("title size exceed the limit must be between 500");
+            }
+        }
 
         Article article = convertToEntity(dto, new Article(), true);
         try {
@@ -122,7 +132,7 @@ public class ArticleServiceImp implements ArticleService {
 
     @Override
     public ArticleResponseDto getSingle(Long id) {
-        Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Article not found"));
+        Article article = findById(id);
         ArticleResponseDto responseDto = convertToArticleResponseDto(article);
         AuthorResponseDto authorResponseDto = convertToAuthorResponse(article.getAuthor());
         List<CommentResponseDto> collect = article.getComments().stream().map(comment -> convertToCommentResponseDto(comment, id))
@@ -130,6 +140,109 @@ public class ArticleServiceImp implements ArticleService {
         responseDto.setAuthor(authorResponseDto);
         responseDto.setComments(collect);
         return responseDto;
+    }
+
+    @Override
+    public ImageResponseDto getImage(Long id) {
+        Article article = findById(id);
+        if (Objects.nonNull(article.getImage()) && !article.getImage().trim().isBlank()) {
+            return getBase64(article.getImage(), id);
+        } else {
+            throw new RuntimeException("Base 64 conversation failed");
+        }
+    }
+
+    @Override
+    public void deleteArticle(Long id) {
+        Article article = findById(id);
+        if (Objects.nonNull(article.getImage()) && !article.getImage().trim().isBlank()) {
+            try {
+                Path path = Path.of("src/images/" + article.getImage());
+                Files.deleteIfExists(path);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        try {
+            articleRepository.delete(article);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot delete articles Cause: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void giveCommentInPost(CommentDto dto, Long id) {
+        if (Objects.nonNull(dto.getText()) && !dto.getText().trim().isBlank()) {
+            if (dto.getText().length() > 100) {
+                throw new RuntimeException("comment exceed the limit must be between 100 characters");
+            }
+        }
+        Article article = findById(id);
+        User currentUser = Helper.getCurrentUser();
+        if (Objects.isNull(currentUser)) {
+            throw new RuntimeException("Log in user not found");
+        }
+        Comment comment = new Comment();
+        comment.setText(dto.getText());
+        comment.setUser(currentUser);
+        comment.setArticle(article);
+
+        try {
+            commentRepository.save(comment);
+            articleRepository.save(article);
+        } catch (Exception e) {
+            throw new RuntimeException("Comment not saved in article cause: " + e.getMessage());
+        }
+
+    }
+
+    @Override
+    public List<CommentResponseDto> getCommand(Long id) {
+        Article article = findById(id);
+
+        return article.getComments().stream().map(comment -> convertToCommentResponseDto(comment, id))
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public void updateLike(Long id) {
+        Article article = findById(id);
+        int likes = article.getLikes();
+        article.setLikes(likes + 1);
+        try {
+            articleRepository.save(article);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update like Cause: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void updateDislike(Long id) {
+        Article article = findById(id);
+        int dislikes = article.getDislikes();
+        article.setDislikes(dislikes + 1);
+        try {
+            articleRepository.save(article);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update dislike Cause: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void enableOrDisableArticle(Long id, boolean b) {
+        Article article = findById(id);
+        article.setDisabled(b);
+        try {
+            articleRepository.save(article);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to disable article Cause: " + e.getMessage());
+        }
+    }
+
+    private Article findById(Long id) {
+        return articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Invalid Article Id or not found"));
     }
 
     public ArticleResponseDto convertToArticleResponseDto(Article article) {
@@ -166,6 +279,24 @@ public class ArticleServiceImp implements ArticleService {
         responseDto.setUpdatedAt(article.getUpdateAt());
         return responseDto;
 
+    }
+
+    private ImageResponseDto getBase64(String image, Long id) {
+        Path path = Paths.get("src/images/" + image);
+        String fileExtension = image.substring(image.lastIndexOf("."));
+        String[] split = fileExtension.split("\\.");
+        try {
+            byte[] fileBytes = Files.readAllBytes(path);
+            String base64String = Base64.getEncoder().encodeToString(fileBytes);
+            if (split.length > 0) {
+                String imageExtension = fileExtension.split("\\.")[1].trim();
+                return new ImageResponseDto(id, "data:image/" + imageExtension + ";base64," + base64String, fileExtension);
+            } else {
+                return new ImageResponseDto(id, "data:image/" + fileExtension + "};base64," + base64String, fileExtension);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Image not found");
+        }
     }
 
 

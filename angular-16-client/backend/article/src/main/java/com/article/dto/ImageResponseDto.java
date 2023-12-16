@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CommentDto {
-    private String text;
+public class ImageResponseDto {
+    private Long id;
+    private String image;
+    private String fileExtension;
 }
