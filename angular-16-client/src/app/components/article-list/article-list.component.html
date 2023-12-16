@@ -1,0 +1,30 @@
+<!-- article-list.component.html -->
+<div>
+    <div *ngFor="let article of mydata">
+        <h3>{{ article.title }}</h3>
+        <img [src]="article.imageUrl" alt="Article Image" style="height: 15px;">
+        <p>{{ article.description }}</p>
+        <p>Author: {{ article.author }}</p>
+        <p>Created At: {{ article.createdAt | date }}</p>
+
+  
+        <!-- Add other fields as needed -->
+
+    <!-- Like and Dislike buttons -->
+    <button (click)="likeArticle(article)">Like {{ article.likes }}</button>
+    <button (click)="dislikeArticle(article)">Dislike {{ article.dislikes }}</button>
+    <button *ngIf="isAdmin" (click)="disable(article.id)">Disable</button>
+
+    <br> <br>
+    <!-- Add other fields as needed -->
+    
+    </div>
+  
+    
+    <!-- <app-pagination
+        [currentPage]="currentPage"
+        [itemsPerPage]="itemsPerPage"
+        [totalItems]="totalItems"
+        (pageChange)="onPageChange($event)"
+    ></app-pagination> -->
+</div>

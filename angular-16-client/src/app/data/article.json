@@ -1,0 +1,34 @@
+
+[
+    {
+      "id": 1,
+      "title": "Angular Basics",
+      "description": "Introduction to Angular",
+      "author": "John Doe",
+      "createdAt": "2023-01-01T12:00:00Z",
+      "likes": 15,
+      "dislikes": 3,
+      "disabled": false
+    },
+    {
+      "id": 2,
+      "title": "React Fundamentals",
+      "description": "Getting started with React",
+      "author": "Jane Smith",
+      "createdAt": "2023-02-01T10:30:00Z",
+      "likes": 20,
+      "dislikes": 5,
+      "disabled": false
+    },
+    {
+      "id": 3,
+      "title": "Vue.js Crash Course",
+      "description": "Quick overview of Vue.js",
+      "author": "Bob Johnson",
+      "createdAt": "2023-03-15T15:45:00Z",
+      "likes": 10,
+      "dislikes": 2,
+      "disabled": true
+    }
+  ]
+  
