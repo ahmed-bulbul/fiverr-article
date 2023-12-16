@@ -16,6 +16,7 @@ import { ArticleDetailsComponent } from './components/article-details/article-de
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { BasicAuthInterceptor } from './helper/BasicAuthInterceptor';
 import { AddCommentComponent } from './components/add-comment/add-comment.component';
+import { HttpInterceptorService } from './services/http-interceptor.service';
 
 
 @NgModule({
@@ -42,7 +43,7 @@ import { AddCommentComponent } from './components/add-comment/add-comment.compon
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: BasicAuthInterceptor,
+      useClass: HttpInterceptorService,
       multi: true
     }
   ],

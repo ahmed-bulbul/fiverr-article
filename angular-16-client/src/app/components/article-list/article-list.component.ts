@@ -8,17 +8,17 @@ import { ArticleService } from 'src/app/services/article.service';
   styleUrls: ['./article-list.component.css']
 })
 export class ArticleListComponent {
- articles: Article[] = [];
- mydata: any = [];
+  articles: Article[] = [];
+  mydata: any = [];
   currentPage = 1;
   itemsPerPage = 5; // Adjust as needed
   totalItems = 0;
-  
-
-  
 
 
-  constructor(private articleService: ArticleService) {}
+
+
+
+  constructor(private articleService: ArticleService) { }
 
   isAdmin: boolean = true;
 
@@ -27,11 +27,12 @@ export class ArticleListComponent {
   }
 
   loadArticles(): void {
-    // this.articleService.getArticles(this.currentPage, this.itemsPerPage)
-    //   .subscribe(response => {
-    //     this.articles = response.articles;
-    //     this.totalItems = response.totalItems;
-    //   });
+
+    let queryParams = {};
+    this.articleService.sendGetRequest(queryParams)
+      .subscribe(response => {
+        //this.articles = response;
+      });
     this.mydata = this.data;
   }
 
@@ -46,7 +47,7 @@ export class ArticleListComponent {
       imageUrl: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg',
       likes: 0,
       dislikes: 0,
-      comments : [
+      comments: [
         {
           id: 1,
           content: 'Wow thats awsome 1',
@@ -68,7 +69,7 @@ export class ArticleListComponent {
       imageUrl: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg',
       likes: 0,
       dislikes: 0,
-      comments : [
+      comments: [
         {
           id: 1,
           content: 'Very Nice Post',
@@ -88,15 +89,28 @@ export class ArticleListComponent {
     this.loadArticles();
   }
 
-  
+
   totalLikes: number = 0;
   totalDislikes: number = 0;
 
   likeArticle(article: any) {
+    console.log(article);
+
+    let apiURL = "localhost:8080/api/article/" + article + "/like";
+    let formData: any = {};
+    this.articleService.sendPostRequest(apiURL, formData).subscribe({
+      next: (response: any) => {
+
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
+
     // Increment the likes count for the given article
-    article.likes++;
+    // article.likes++;
     // Increment the total likes count
-    this.totalLikes++;
+    //this.totalLikes++;
   }
 
   dislikeArticle(article: any) {
@@ -110,13 +124,13 @@ export class ArticleListComponent {
     // Return true if the article has already been liked
 
     alert("You have already liked this article");
-   
+
   }
   commentArticle(id: any): void {
     // Return true if the article has already been liked
 
     alert("You have already liked this article");
-    
-   
+
+
   }
 }
