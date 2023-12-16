@@ -1,6 +1,8 @@
 // add-comment.component.ts
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/app/environments/environments';
+import { ArticleService } from 'src/app/services/article.service';
 
 @Component({
   selector: 'app-add-comment',
@@ -10,10 +12,15 @@ import { ActivatedRoute } from '@angular/router';
 export class AddCommentComponent implements OnInit {
   comment = {
     id: '', // This will be populated from the URL parameter
-    content: ''
+    text: ''
   };
 
-  constructor(private route: ActivatedRoute) {}
+  public baseUrl = environment.baseUrl;
+
+  constructor(
+    private route: ActivatedRoute,
+    private articleService: ArticleService,
+    private router: Router,) {}
 
   ngOnInit() {
     // Retrieve the 'id' parameter from the URL
@@ -23,8 +30,18 @@ export class AddCommentComponent implements OnInit {
   }
 
   onSubmit() {
-    // Handle the form submission logic here
-    console.log('Submitted Comment:', this.comment);
-    // Add logic to send the comment to your backend or perform other actions
+    let apiURL = this.baseUrl + "/api/article/" + this.comment.id + "/comment";
+    let formData: any = {};
+    formData = this.comment;
+    this.articleService.sendPostRequest(apiURL, formData).subscribe({
+      next: (response: any) => {
+
+        this.router.navigate(['/articles']);
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
+
   }
 }

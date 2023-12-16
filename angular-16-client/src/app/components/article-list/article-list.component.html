@@ -4,43 +4,43 @@
         <h3>{{ article.title }}</h3>
         <img [src]="article.imageUrl" alt="Article Image" style="height: 15px;">
         <p>{{ article.description }}</p>
-        <p>Author: {{ article.author }}</p>
+        <p>Author: {{ article?.author?.userName}}</p>
         <p>Created At: {{ article.createdAt | date }}</p>
 
         <!-- Like and Dislike buttons -->
-    <button (click)="likeArticle(article?.id)">Like {{ article.likes }}</button>
-    <button (click)="dislikeArticle(article)">Dislike {{ article.dislikes }}</button>
-    <button *ngIf="isAdmin" (click)="disable(article.id)">Disable</button>
-    <!-- comment button 'articles/:id/comments' -->
-    <button>
-        <a routerLink="{{ article.id }}/comments">Comments</a>
-    </button>
-   
+        <button (click)="likeArticle(article?.articleId)">Like {{ article.likes }}</button>
+        <button (click)="dislikeArticle(article?.articleId)">Dislike {{ article.dislikes }}</button>
+        <button *ngIf="isAdmin" (click)="disable(article.articleId)">Disable</button>
+        <!-- comment button 'articles/:id/comments' -->
+        <button>
+            <a routerLink="{{ article.articleId }}/comments">Comments</a>
+        </button>
 
-    <!--  -->
-<br><br>
-    <h4>Comments:: </h4>
-<hr>
+
+        <!--  -->
+        <br><br>
+        <h4>Comments:: </h4>
+        <hr>
         <!-- comment -->
         <div *ngFor="let comment of article.comments">
             <p>{{ comment.content }}</p>
             <hr>
         </div>
 
-  
+
         <!-- Add other fields as needed -->
 
-    
 
-    <br><br>
-   
 
-    <br> <br>
-    <!-- Add other fields as needed -->
-    
+        <br><br>
+
+
+        <br> <br>
+        <!-- Add other fields as needed -->
+
     </div>
-  
-    
+
+
     <!-- <app-pagination
         [currentPage]="currentPage"
         [itemsPerPage]="itemsPerPage"

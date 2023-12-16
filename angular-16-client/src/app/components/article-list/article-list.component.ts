@@ -38,7 +38,7 @@ export class ArticleListComponent {
     let queryParam: any = {};
     this.articleService.sendGetRequest(apiURL, queryParam).subscribe({
       next: (response: any) => {
-
+        this.mydata = response?.model
       },
       error: (error: any) => {
         console.log(error);
@@ -46,53 +46,6 @@ export class ArticleListComponent {
     });
   }
 
-  // make dummy data for testing purposes
-  data = [
-    {
-      id: 1,
-      title: 'Article 1',
-      author: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      description: 'Description 1',
-      createdAt: new Date(),
-      imageUrl: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg',
-      likes: 0,
-      dislikes: 0,
-      comments: [
-        {
-          id: 1,
-          content: 'Wow thats awsome 1',
-          createdAt: new Date()
-        },
-        {
-          id: 2,
-          content: 'Awsome post .....  2',
-          createdAt: new Date()
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: 'Article 2',
-      author: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      description: 'Description 2',
-      createdAt: new Date(),
-      imageUrl: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg',
-      likes: 0,
-      dislikes: 0,
-      comments: [
-        {
-          id: 1,
-          content: 'Very Nice Post',
-          createdAt: new Date()
-        },
-        {
-          id: 2,
-          content: 'Great post....... 2',
-          createdAt: new Date()
-        }
-      ]
-    }
-  ]
 
   onPageChange(page: number): void {
     this.currentPage = page;
@@ -107,9 +60,9 @@ export class ArticleListComponent {
     let apiURL = this.baseUrl + "/api/article/" + articleId + "/like";
     let formData: any = {};
     formData.id = articleId;
-    this.articleService.sendPostRequest(apiURL, formData).subscribe({
+    this.articleService.sendPutRequest(apiURL, formData).subscribe({
       next: (response: any) => {
-
+        this.loadArticles();
       },
       error: (error: any) => {
         console.log(error);
@@ -118,18 +71,33 @@ export class ArticleListComponent {
 
   }
 
-  dislikeArticle(article: any) {
-    // Increment the dislikes count for the given article
-    article.dislikes++;
-    // Increment the total dislikes count
-    this.totalDislikes++;
+  dislikeArticle(articleId: any) {
+    let apiURL = this.baseUrl + "/api/article/" + articleId + "/dislike";
+    let formData: any = {};
+    formData.id = articleId;
+    this.articleService.sendPutRequest(apiURL, formData).subscribe({
+      next: (response: any) => {
+        this.loadArticles();
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
+
   }
 
-  disable(id: any): void {
-    // Return true if the article has already been liked
-
-    alert("You have already liked this article");
-
+  disable(articleId: any): void {
+    let apiURL = this.baseUrl + "/api/article/" + articleId + "/disable";
+    let formData: any = {};
+    formData.id = articleId;
+    this.articleService.sendPutRequest(apiURL, formData).subscribe({
+      next: (response: any) => {
+        this.loadArticles();
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
   }
   commentArticle(id: any): void {
     // Return true if the article has already been liked

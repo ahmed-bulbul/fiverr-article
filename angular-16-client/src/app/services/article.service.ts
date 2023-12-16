@@ -40,6 +40,14 @@ export class ArticleService {
 
   }
 
+  public sendPutRequest(apiURL:any, formData:any) {
+
+
+    console.log("@sendPutRequest");
+    return this.http.put(apiURL, formData);
+
+  }
+
 
   //login api. username password passing with basic auth 
   // login(username: string, password: string): Observable<any> {
