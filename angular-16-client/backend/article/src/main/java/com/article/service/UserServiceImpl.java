@@ -6,6 +6,8 @@ import com.article.entity.Role;
 import com.article.entity.User;
 import com.article.repository.RoleRepository;
 import com.article.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,6 +17,9 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
 
   private final RoleRepository roleRepository;
+
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
   public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
     this.userRepository = userRepository;
@@ -48,6 +53,7 @@ public class UserServiceImpl implements UserService {
     user.setUsername(signUpDto.getUsername());
     user.setEmail(signUpDto.getEmail());
     user.setMobileNumber(signUpDto.getMobile());
+    user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
     user.setPrivileges(roleSet);
 
     return user;
