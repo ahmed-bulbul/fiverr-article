@@ -2,6 +2,7 @@ package com.article.controller;
 
 import com.article.PageData;
 import com.article.dto.ArticleRequestDto;
+import com.article.dto.ArticleResponseDto;
 import com.article.entity.Article;
 import com.article.service.ArticleService;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,11 @@ public class ArticleController {
     public PageData getAllArticle(@PageableDefault(sort = "id",
             direction = Sort.Direction.DESC) Pageable pageable) {
         return  articleService.getAll(pageable);
+    }
+
+    @GetMapping("/{id}")
+    public ArticleResponseDto getSingle(@PathVariable Long id) {
+        return articleService.getSingle(id);
     }
 
 }
