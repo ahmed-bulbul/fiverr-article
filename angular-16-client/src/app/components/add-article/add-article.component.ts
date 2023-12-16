@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from 'src/app/environments/environments';
 import { LocalstorageService } from 'src/app/helper/localstorage.service';
 import { ArticleService } from 'src/app/services/article.service';
 
@@ -10,27 +11,47 @@ import { ArticleService } from 'src/app/services/article.service';
 })
 export class AddArticleComponent {
 
-  constructor(private route: ActivatedRoute,private articleService: ArticleService,private localstorageService: LocalstorageService) {}
+  public baseUrl = environment.baseUrl;
+
+  constructor(private route: ActivatedRoute,
+    private articleService: ArticleService,
+    private localstorageService: LocalstorageService) { }
 
   article = {
     title: '',
     body: '',
+    likes: 0,
+    dislikes: 0,
+    disabled: false,
     fileExtension: '',
     image: '',
-    
+
     // Add other fields here
   };
 
   submitted = false;
 
   saveArticle() {
-    // Handle the form submission logic here
     
-    console.log(this.article);
-    this.submitted = true;
-    this.articleService.createArticle(this.article).subscribe((res:any) => {
-      // Handle the response here
+    let apiURL = this.baseUrl + "/api/article";
+    let formData: any = {};
+    formData = this.article;
+    this.articleService.sendPostRequest(apiURL, formData).subscribe({
+      next: (response: any) => {
+        this.submitted = true;
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
     });
+
+    // Handle the form submission logic here
+
+    // console.log(this.article);
+    // this.submitted = true;
+    // this.articleService.createArticle(this.article).subscribe((res:any) => {
+    //   // Handle the response here
+    // });
   }
 
   onFileSelected(event: any): void {

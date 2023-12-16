@@ -35,6 +35,8 @@ export class LoginComponent {
     console.log('Username:', this.loginForm.value.username);
     console.log('Password:', this.loginForm.value.password);
     // Add your authentication logic, API calls, etc.
+    this.username = this.loginForm.value.username;
+    this.password = this.loginForm.value.password
 
     //this.articleService.login(this.loginForm.value.username, this.loginForm.value.password);
 

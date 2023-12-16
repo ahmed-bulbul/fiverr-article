@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { environment } from 'src/app/environments/environments';
 import { Article } from 'src/app/models/Article.model';
 import { ArticleService } from 'src/app/services/article.service';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-article-list',
@@ -8,6 +10,9 @@ import { ArticleService } from 'src/app/services/article.service';
   styleUrls: ['./article-list.component.css']
 })
 export class ArticleListComponent {
+
+  public baseUrl = environment.baseUrl;
+  
   articles: Article[] = [];
   mydata: any = [];
   currentPage = 1;
@@ -18,12 +23,16 @@ export class ArticleListComponent {
 
 
 
-  constructor(private articleService: ArticleService) { }
+  constructor(private articleService: ArticleService,
+    private authenticationService:AuthenticationService) { }
 
   isAdmin: boolean = true;
 
   ngOnInit(): void {
     this.loadArticles();
+  if(this.authenticationService.isUserLoggedIn()){
+    console.log("============ USER ====================");
+  }
   }
 
   loadArticles(): void {
@@ -93,11 +102,10 @@ export class ArticleListComponent {
   totalLikes: number = 0;
   totalDislikes: number = 0;
 
-  likeArticle(article: any) {
-    console.log(article);
-
-    let apiURL = "localhost:8080/api/article/" + article + "/like";
+  likeArticle(articleId: any) {
+    let apiURL = this.baseUrl + "/api/article/" + articleId + "/like";
     let formData: any = {};
+    formData.id = articleId;
     this.articleService.sendPostRequest(apiURL, formData).subscribe({
       next: (response: any) => {
 
@@ -107,10 +115,6 @@ export class ArticleListComponent {
       }
     });
 
-    // Increment the likes count for the given article
-    // article.likes++;
-    // Increment the total likes count
-    //this.totalLikes++;
   }
 
   dislikeArticle(article: any) {

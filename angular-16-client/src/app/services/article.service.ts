@@ -3,15 +3,17 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Article } from '../models/Article.model';
 import { LocalstorageService } from '../helper/localstorage.service';
+import { environment } from '../environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
-  private apiUrl = 'localhost:8080/api';
-  private loginUrl = 'localhost:8080/auth/login';
+  public baseUrl = environment.baseUrl;
+  private apiUrl = 'http://localhost:8080/api';
+  private loginUrl = 'http://localhost:8080/auth/login';
 
-  private testUrl = 'localhost:8080/top';
+  private testUrl = 'http://localhost:8080/top';
 
   public username: String = '';
   public password: String = '';
