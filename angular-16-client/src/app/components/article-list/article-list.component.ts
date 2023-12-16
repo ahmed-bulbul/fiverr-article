@@ -12,7 +12,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class ArticleListComponent {
 
   public baseUrl = environment.baseUrl;
-  
+
   articles: Article[] = [];
   mydata: any = [];
   currentPage = 1;
@@ -23,26 +23,27 @@ export class ArticleListComponent {
 
 
 
-  constructor(private articleService: ArticleService,
-    private authenticationService:AuthenticationService) { }
+  constructor(
+    private articleService: ArticleService,
+    private authenticationService: AuthenticationService) { }
 
   isAdmin: boolean = true;
 
   ngOnInit(): void {
     this.loadArticles();
-  if(this.authenticationService.isUserLoggedIn()){
-    console.log("============ USER ====================");
-  }
   }
 
   loadArticles(): void {
+    let apiURL = this.baseUrl + "/api/article";
+    let queryParam: any = {};
+    this.articleService.sendGetRequest(apiURL, queryParam).subscribe({
+      next: (response: any) => {
 
-    let queryParams = {};
-    this.articleService.sendGetRequest(queryParams)
-      .subscribe(response => {
-        //this.articles = response;
-      });
-    this.mydata = this.data;
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
   }
 
   // make dummy data for testing purposes

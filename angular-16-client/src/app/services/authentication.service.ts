@@ -35,25 +35,26 @@ export class AuthenticationService {
 
   registerSuccessfulLogin(username:any, password:any) {
     console.log(username, password);
-    sessionStorage.setItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME, username);
+    localStorage.setItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME, username);
    
   }
 
   logout() {
-    sessionStorage.removeItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
+    localStorage.removeItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
     this.username = null;
     this.password = null;
   }
 
   isUserLoggedIn() {
-    let user = sessionStorage.getItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME)
+    let user = localStorage.getItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME)
     if (user === null) return false
     return true
   }
 
   getLoggedInUserName() {
-    let user = sessionStorage.getItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME)
+    let user = localStorage.getItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME)
     if (user === null) return ''
     return user
   }
+  
 }
