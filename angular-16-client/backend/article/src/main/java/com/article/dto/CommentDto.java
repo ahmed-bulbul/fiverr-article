@@ -9,6 +9,4 @@ import lombok.NoArgsConstructor;
 @Data
 public class CommentDto {
     private String text;
-    private Long articleId;
-    private Long userId;
 }
