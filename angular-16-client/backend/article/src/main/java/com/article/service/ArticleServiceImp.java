@@ -120,6 +120,18 @@ public class ArticleServiceImp implements ArticleService {
                 .build();
     }
 
+    @Override
+    public ArticleResponseDto getSingle(Long id) {
+        Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Article not found"));
+        ArticleResponseDto responseDto = convertToArticleResponseDto(article);
+        AuthorResponseDto authorResponseDto = convertToAuthorResponse(article.getAuthor());
+        List<CommentResponseDto> collect = article.getComments().stream().map(comment -> convertToCommentResponseDto(comment, id))
+                .collect(Collectors.toList());
+        responseDto.setAuthor(authorResponseDto);
+        responseDto.setComments(collect);
+        return responseDto;
+    }
+
     public ArticleResponseDto convertToArticleResponseDto(Article article) {
         ArticleResponseDto responseDto = new ArticleResponseDto();
         responseDto.setArticleId(article.getId());
