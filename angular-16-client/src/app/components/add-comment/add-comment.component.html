@@ -1,0 +1,13 @@
+<!-- add-comment.component.html -->
+<div>
+    <h2>Add Comment</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="commentContent">Content:</label>
+        <textarea id="commentContent" name="commentContent" [(ngModel)]="comment.content" required></textarea>
+      </div>
+  
+      <button type="submit">Add Comment</button>
+    </form>
+  </div>
+  
