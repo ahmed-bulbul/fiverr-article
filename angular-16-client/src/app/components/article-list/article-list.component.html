@@ -7,13 +7,33 @@
         <p>Author: {{ article.author }}</p>
         <p>Created At: {{ article.createdAt | date }}</p>
 
-  
-        <!-- Add other fields as needed -->
-
-    <!-- Like and Dislike buttons -->
+        <!-- Like and Dislike buttons -->
     <button (click)="likeArticle(article)">Like {{ article.likes }}</button>
     <button (click)="dislikeArticle(article)">Dislike {{ article.dislikes }}</button>
     <button *ngIf="isAdmin" (click)="disable(article.id)">Disable</button>
+    <!-- comment button 'articles/:id/comments' -->
+    <button>
+        <a routerLink="{{ article.id }}/comments">Comments</a>
+    </button>
+   
+
+    <!--  -->
+<br><br>
+    <h4>Comments:: </h4>
+<hr>
+        <!-- comment -->
+        <div *ngFor="let comment of article.comments">
+            <p>{{ comment.content }}</p>
+            <hr>
+        </div>
+
+  
+        <!-- Add other fields as needed -->
+
+    
+
+    <br><br>
+   
 
     <br> <br>
     <!-- Add other fields as needed -->

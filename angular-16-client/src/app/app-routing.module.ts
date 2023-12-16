@@ -8,6 +8,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { AddArticleComponent } from './components/add-article/add-article.component';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { ArticleDetailsComponent } from './components/article-details/article-details.component';
+import { AddCommentComponent } from './components/add-comment/add-comment.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'tutorials', pathMatch: 'full' },
@@ -19,6 +21,7 @@ const routes: Routes = [
   {path: 'new',component:AddArticleComponent},
   {path: 'articles',component:ArticleListComponent},
   {path: 'articles/:id',component:ArticleDetailsComponent},
+  {path: 'articles/:id/comments',component:AddCommentComponent},
 ];
 
 @NgModule({

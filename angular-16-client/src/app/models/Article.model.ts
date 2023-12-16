@@ -1,3 +1,5 @@
+import { Comments } from "./Comments.model";
+
 export class Article {
     id?: number;
     title?: string;
@@ -7,4 +9,5 @@ export class Article {
     likes: number= 0;
     dislikes?: number=0;
     // Add other fields as needed
+    Comments?: Comments[];
   }

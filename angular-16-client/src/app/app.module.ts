@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +14,9 @@ import { AddArticleComponent } from './components/add-article/add-article.compon
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { ArticleDetailsComponent } from './components/article-details/article-details.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { BasicAuthInterceptor } from './helper/BasicAuthInterceptor';
+import { AddCommentComponent } from './components/add-comment/add-comment.component';
+
 
 @NgModule({
   declarations: [
@@ -26,6 +29,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     AddArticleComponent,
     ArticleListComponent,
     ArticleDetailsComponent,
+    AddCommentComponent,
     
   ],
   imports: [
@@ -35,7 +39,13 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BasicAuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

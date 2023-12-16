@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { LocalstorageService } from 'src/app/helper/localstorage.service';
+import { ArticleService } from 'src/app/services/article.service';
 
 @Component({
   selector: 'app-add-article',
@@ -7,10 +10,12 @@ import { Component } from '@angular/core';
 })
 export class AddArticleComponent {
 
+  constructor(private route: ActivatedRoute,private articleService: ArticleService,private localstorageService: LocalstorageService) {}
+
   article = {
     title: '',
-    description: '',
-    imageExtension: '',
+    body: '',
+    fileExtension: '',
     image: '',
     
     // Add other fields here
@@ -20,8 +25,12 @@ export class AddArticleComponent {
 
   saveArticle() {
     // Handle the form submission logic here
+    
     console.log(this.article);
     this.submitted = true;
+    this.articleService.createArticle(this.article).subscribe((res:any) => {
+      // Handle the response here
+    });
   }
 
   onFileSelected(event: any): void {
@@ -40,7 +49,7 @@ export class AddArticleComponent {
 
       // Extract the file extension
       const extension = file.name.split('.').pop();
-      this.article.imageExtension = extension ? extension.toLowerCase() : '';
+      this.article.fileExtension = extension ? extension.toLowerCase() : '';
     };
 
     reader.readAsDataURL(file);

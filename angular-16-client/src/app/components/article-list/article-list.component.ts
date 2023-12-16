@@ -45,7 +45,19 @@ export class ArticleListComponent {
       createdAt: new Date(),
       imageUrl: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg',
       likes: 0,
-      dislikes: 0
+      dislikes: 0,
+      comments : [
+        {
+          id: 1,
+          content: 'Wow thats awsome 1',
+          createdAt: new Date()
+        },
+        {
+          id: 2,
+          content: 'Awsome post .....  2',
+          createdAt: new Date()
+        }
+      ]
     },
     {
       id: 2,
@@ -55,7 +67,19 @@ export class ArticleListComponent {
       createdAt: new Date(),
       imageUrl: 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg',
       likes: 0,
-      dislikes: 0
+      dislikes: 0,
+      comments : [
+        {
+          id: 1,
+          content: 'Very Nice Post',
+          createdAt: new Date()
+        },
+        {
+          id: 2,
+          content: 'Great post....... 2',
+          createdAt: new Date()
+        }
+      ]
     }
   ]
 
@@ -86,6 +110,13 @@ export class ArticleListComponent {
     // Return true if the article has already been liked
 
     alert("You have already liked this article");
+   
+  }
+  commentArticle(id: any): void {
+    // Return true if the article has already been liked
+
+    alert("You have already liked this article");
+    
    
   }
 }
