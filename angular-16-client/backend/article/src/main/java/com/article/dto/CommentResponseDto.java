@@ -6,29 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ArticleResponseDto {
+public class CommentResponseDto {
+    private Long id;
+    private String text;
     private Long articleId;
-    private String title;
-    private String body;
-    private String image;
-
-    private int likes;
-
-    private int dislikes;
-
-    private Boolean disabled;
-    private String fileExtension;
-    private AuthorResponseDto author;
+    private Long userId;
+    private String userFullName;
+    private String userName;
     @JsonFormat(pattern = "dd MMMM yyyy hh:mm:ss a", shape = JsonFormat.Shape.STRING)
     private LocalDateTime createdAt;
     @JsonFormat(pattern = "dd MMMM yyyy hh:mm:ss a", shape = JsonFormat.Shape.STRING)
     private LocalDateTime updatedAt;
-
-    private List<CommentResponseDto> comments;
-
 }
