@@ -25,11 +25,10 @@ export class ArticleService {
     return this.http.get<{ articles: Article[], totalItems: number }>(url);
   }
 
-  public sendGetRequest(queryParams:any) {
+  public sendGetRequest(apiURL:any, formData:any) {
 
     console.log("@sendGetRequest");
-    const apiURL = `${this.apiUrl}/article`;
-    return this.http.get(apiURL, { params: queryParams });
+    return this.http.get(apiURL, formData);
 
   }
 
