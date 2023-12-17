@@ -1,7 +1,6 @@
 package com.article.service;
 
 import com.article.PageData;
-import com.article.constant.ERole;
 import com.article.dto.*;
 import com.article.entity.Article;
 import com.article.entity.Comment;
@@ -166,20 +165,30 @@ public class ArticleServiceImp implements ArticleService {
   @Override
   public void deleteArticle(Long id) {
     Article article = findById(id);
-    if (Objects.nonNull(article.getImage()) && !article.getImage().trim().isBlank()) {
-      try {
-        Path path = Path.of("src/images/" + article.getImage());
-        Files.deleteIfExists(path);
-      } catch (Exception e) {
-        log.error(e.getMessage());
-        throw new RuntimeException(e.getMessage());
+    User currentUser = Helper.getCurrentUser();
+    if (Objects.isNull(currentUser)) {
+      throw new RuntimeException("Log in user not found");
+    }
+    if (Objects.equals(article.getAuthorId(), currentUser.getId())) {
+      if (Objects.nonNull(article.getImage()) && !article.getImage().trim().isBlank()) {
+        try {
+          Path path = Path.of("src/images/" + article.getImage());
+          Files.deleteIfExists(path);
+        } catch (Exception e) {
+          log.error(e.getMessage());
+          throw new RuntimeException(e.getMessage());
+        }
       }
+      try {
+        articleRepository.delete(article);
+      } catch (Exception e) {
+        throw new RuntimeException("Cannot delete articles Cause: " + e.getMessage());
+      }
+
+    } else {
+      throw new RuntimeException("You are not permitted to delete another author article");
     }
-    try {
-      articleRepository.delete(article);
-    } catch (Exception e) {
-      throw new RuntimeException("Cannot delete articles Cause: " + e.getMessage());
-    }
+
   }
 
   @Override
