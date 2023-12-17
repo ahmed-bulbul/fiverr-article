@@ -27,4 +27,6 @@ public interface ArticleService {
     void updateDislike(Long id);
 
     void enableOrDisableArticle(Long id, boolean b);
+
+  Article findById(Long id);
 }

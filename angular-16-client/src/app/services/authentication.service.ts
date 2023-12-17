@@ -56,5 +56,11 @@ export class AuthenticationService {
     if (user === null) return ''
     return user
   }
+
+    register(apiURL:any, formData:any) {
+      console.log("@sendPostRequest");
+      return this.http.post(apiURL, formData);
+  
+  }
   
 }

@@ -7,6 +7,7 @@ export class Article {
     author?: string;
     createdAt?: Date;
     likes: number= 0;
+    disabled = false;
     dislikes?: number=0;
     // Add other fields as needed
     Comments?: Comments[];

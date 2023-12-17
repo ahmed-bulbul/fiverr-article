@@ -6,6 +6,7 @@ import com.article.repository.RoleRepository;
 import com.article.repository.UserRepository;
 import com.article.service.UserService;
 import com.article.service.UserServiceImpl;
+import com.article.util.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/auth")
@@ -46,6 +48,7 @@ public class AuthController {
     response.put("message", "User login successfully!...");
     return ResponseEntity.ok(response);
   }
+
 
 
   @PostMapping("/logout")

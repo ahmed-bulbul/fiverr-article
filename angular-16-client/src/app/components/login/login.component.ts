@@ -41,6 +41,7 @@ export class LoginComponent {
     //this.articleService.login(this.loginForm.value.username, this.loginForm.value.password);
 
     this.authenticationService.authenticationService(this.username, this.password).subscribe((result) => {
+
       this.router.navigate(['/articles']);
 
       this.invalidLogin = false;

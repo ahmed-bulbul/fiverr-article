@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Long register(SignUpDto signUpDto) {
-    User user = convertToEntity(signUpDto);
+    User user = userRepository.save(convertToEntity(signUpDto));
     return user.getId();
 
   }

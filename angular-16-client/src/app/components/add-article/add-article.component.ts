@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/app/environments/environments';
 import { LocalstorageService } from 'src/app/helper/localstorage.service';
 import { ArticleService } from 'src/app/services/article.service';
@@ -14,7 +14,7 @@ export class AddArticleComponent {
   public baseUrl = environment.baseUrl;
 
   constructor(private route: ActivatedRoute,
-    private articleService: ArticleService,
+    private articleService: ArticleService,private router: Router,
     private localstorageService: LocalstorageService) { }
 
   article = {
@@ -39,6 +39,7 @@ export class AddArticleComponent {
     this.articleService.sendPostRequest(apiURL, formData).subscribe({
       next: (response: any) => {
         this.submitted = true;
+        this.router.navigate(['/articles']);
       },
       error: (error: any) => {
         console.log(error);

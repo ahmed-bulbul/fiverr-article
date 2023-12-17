@@ -17,5 +17,6 @@ export class AppComponent {
 
   ngOnInit() {
     this.isLoggedIn = this.localstorageService.isLoggedIn();
+    console.log('isLoggedIn', this.isLoggedIn);
   }
 }

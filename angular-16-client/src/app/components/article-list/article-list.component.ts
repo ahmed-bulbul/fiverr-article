@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from 'src/app/environments/environments';
 import { Article } from 'src/app/models/Article.model';
 import { ArticleService } from 'src/app/services/article.service';
@@ -25,7 +26,7 @@ export class ArticleListComponent {
 
   constructor(
     private articleService: ArticleService,
-    private authenticationService: AuthenticationService) { }
+    private authenticationService: AuthenticationService,private route: Router) { }
 
   isAdmin: boolean = true;
 
@@ -44,6 +45,15 @@ export class ArticleListComponent {
         console.log(error);
       }
     });
+  }
+
+  decodeBase64Image(base64String: string): void {
+    const imgElement = document.getElementById('previewImage') as HTMLImageElement;
+  
+    // Set the base64 string as the source of the img element
+    imgElement.src = base64String;
+    console.log(imgElement.src);
+    alert(imgElement.src);
   }
 
 
@@ -92,6 +102,7 @@ export class ArticleListComponent {
     formData.id = articleId;
     this.articleService.sendPutRequest(apiURL, formData).subscribe({
       next: (response: any) => {
+        this.route.navigate(['/articles']);
         this.loadArticles();
       },
       error: (error: any) => {

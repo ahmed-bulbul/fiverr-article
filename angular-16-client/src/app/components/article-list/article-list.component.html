@@ -1,8 +1,10 @@
 <!-- article-list.component.html -->
 <div>
-    <div *ngFor="let article of mydata">
+    <div   *ngFor="let article of mydata">
+       <div *ngIf="!article.disabled">
+
         <h3>{{ article.title }}</h3>
-        <img [src]="article.imageUrl" alt="Article Image" style="height: 15px;">
+        <img *ngIf="article.image" [src]="article.image" (load)="decodeBase64Image(article.image)" alt="Article Image" style="height: 50px;">
         <p>{{ article.description }}</p>
         <p>Author: {{ article?.author?.userName}}</p>
         <p>Created At: {{ article.createdAt | date }}</p>
@@ -23,7 +25,7 @@
         <hr>
         <!-- comment -->
         <div *ngFor="let comment of article.comments">
-            <p>{{ comment.content }}</p>
+            <p>{{ comment.text }}--- by {{comment.userName}}</p>
             <hr>
         </div>
 
@@ -37,6 +39,8 @@
 
         <br> <br>
         <!-- Add other fields as needed -->
+
+       </div>
 
     </div>
 

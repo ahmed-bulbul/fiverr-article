@@ -29,6 +29,14 @@ export class LocalstorageService {
         return localStorage.getItem("username");
     }
 
+    setRole(role: string) {
+        localStorage.setItem("role", role);
+    }
+
+    getRole() {
+        return localStorage.getItem("role");
+    }
+
     setPass(password: string) {
         localStorage.setItem("password", password);
     }
@@ -40,7 +48,7 @@ export class LocalstorageService {
 
     isLoggedIn(){
 
-        if(this.getUsername()){
+        if(localStorage.getItem("authenticatedUser")){
             return true;
         }
         else{
