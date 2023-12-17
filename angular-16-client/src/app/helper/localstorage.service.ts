@@ -56,4 +56,13 @@ export class LocalstorageService {
         }
     }
 
+    //clear authevcated user
+    logout(){
+        localStorage.removeItem("authenticatedUser");
+        localStorage.removeItem("username");
+        localStorage.removeItem("password");
+        localStorage.removeItem("role");
+        localStorage.removeItem("token");
+    }
+
 }

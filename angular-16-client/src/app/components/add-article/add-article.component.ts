@@ -42,7 +42,7 @@ export class AddArticleComponent {
         this.router.navigate(['/articles']);
       },
       error: (error: any) => {
-        console.log(error);
+        alert(error.error.message);
       }
     });
 
