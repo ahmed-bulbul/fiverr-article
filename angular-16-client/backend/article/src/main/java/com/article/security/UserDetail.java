@@ -38,13 +38,6 @@ public class UserDetail  implements UserDetailsService {
     }
 
     private CustomUserDetails mapUserToCustomUserDetails(User user, Set<GrantedAuthority> authorities) {
-        CustomUserDetails customUserDetails = new CustomUserDetails();
-        customUserDetails.setId(user.getId());
-        customUserDetails.setUsername(user.getUsername());
-        customUserDetails.setPassword(user.getPassword());
-        customUserDetails.setName(user.getName());
-        customUserDetails.setEmail(user.getEmail());
-        customUserDetails.setAuthorities(authorities);
-        return customUserDetails;
+        return CustomUserDetails.build(user);
     }
 }
